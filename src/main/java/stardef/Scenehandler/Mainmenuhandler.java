@@ -349,7 +349,7 @@ public class Mainmenuhandler {
 
                 Logger.info("Spaceship saved!");
            }
-            catch (Exception exp) { Logger.error("Something went wrong!"); Logger.error(exp.getMessage()); }
+            catch (Exception exp) { exp.printStackTrace(); Logger.error("Something went wrong!"); Logger.error(exp.getMessage()); }
         });
         return pane;
     }

@@ -12,6 +12,10 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.JAXBException;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Objects;
 
 public class Xmlloader
 {
@@ -53,30 +57,36 @@ public class Xmlloader
 
     public static void jaxbObjectToXMLfile(Object obj,String path)
     {
-    BufferedWriter writer = null;
-    String str=Xmlloader.jaxbObjectToXML(obj);
-    String xmlpath="src/main/resources/Xmlresources/";
-    try
-    {
-        writer = new BufferedWriter( new FileWriter(xmlpath+path));
-        writer.write( str);
-    }
-    catch ( IOException exp) {   }
-    finally
-    {
-        try
-        {
-            if ( writer != null)
-            writer.close( );
-        }
-        catch ( IOException exp) {   }
-    }
+            if(!isInJAR())
+            {
+                //System.out.println(Xmlloader.class.getProtectionDomain().getCodeSource().getLocation().toURI()+" inside xmlloader");
+
+
+            BufferedWriter writer = null;
+            String str=Xmlloader.jaxbObjectToXML(obj);
+            String xmlpath="src/main/resources/Xmlresources/";
+            try
+            {
+                writer = new BufferedWriter( new FileWriter(xmlpath+path));
+                writer.write( str);
+            }
+            catch ( IOException exp) {   }
+            finally
+            {
+                try
+                {
+                    if ( writer != null)
+                        writer.close( );
+                }
+                catch ( IOException exp) {   }
+            }
+            }
     }
 
     public static Empires XMLfileToEmpires(String path)
     {
         String xmlpath="/Xmlresources/";
-        System.out.println( Star_Defender.class.getResourceAsStream(xmlpath+path));
+        System.out.println( Star_Defender.class.getResourceAsStream(xmlpath+path) +" inside xmlloader");
         Empires emp=new Empires();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Empires.class);
@@ -90,6 +100,7 @@ public class Xmlloader
     public static Spaceship XMLfileToShipdata(String path)
     {
         String xmlpath="/Xmlresources/";
+        System.out.println( Star_Defender.class.getResourceAsStream(xmlpath+path) +" inside xmlloader");
         Spaceship ss=new Spaceship();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Spaceship.class);
@@ -99,6 +110,18 @@ public class Xmlloader
         }
         catch(JAXBException e){e.printStackTrace();}
         return ss;
+    }
+    public static boolean isInJAR(){
+        String protocol = Star_Defender.class.getResource("").getProtocol();
+
+        if(Objects.equals(protocol, "jar")){
+            // run in jar
+            return true;
+        } else  {
+            // run in ide
+            return false;
+        }
+
     }
 
 
