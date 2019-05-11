@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +17,9 @@ import org.pmw.tinylog.Logger;
 import stardef.Baseclasses.*;
 import stardef.Star_Defender;
 
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.util.*;
 
 import java.io.File;
@@ -171,14 +175,22 @@ public class Mainmenuhandler {
         buttonsimplified(btnstart);
         ListView lv = (ListView) hbox.getChildren().get(0);
         lv.getSelectionModel().select(0);
-        String cnstpath="file:src/main/resources/Maps/Small/";
+        String cnstpath="/Maps/Small/";
         btnstart.setOnMouseClicked(m->{
-            String path=cnstpath+lv.getSelectionModel().getSelectedItem().toString()+".png";
-            Logger.info("File selected: "+path);
-            Mainhandler.Generategame(Starmaphandler.Getstarlocation(new Image(path)),currentscene);
-            currentscene.setRoot(Mainhandler.ssh.GameScreen);
-            AnchorPane.setTopAnchor(currentscene.getRoot().getChildrenUnmodifiable().get(0),0.0);
-            Logger.info(currentscene.getRoot().getClass());
+            try {
+                String path = cnstpath + lv.getSelectionModel().getSelectedItem().toString() + ".png";
+                //Logger.info("File selected: " + ClassLoader.getSystemClassLoader().getResource(path).toURI());
+                System.out.println("before1 "+path);
+                Image img=new Image(Mainmenuhandler.class.getClass().getResourceAsStream(path));
+                System.out.println(img);
+                System.out.println("before2");
+                Mainhandler.Generategame(
+                        Starmaphandler.Getstarlocation(img), currentscene);
+                currentscene.setRoot(Mainhandler.ssh.GameScreen);
+                AnchorPane.setTopAnchor(currentscene.getRoot().getChildrenUnmodifiable().get(0), 0.0);
+                Logger.info(currentscene.getRoot().getClass());
+            }
+            catch (Exception e){Logger.error(e.getMessage()); System.out.println(e.getMessage());}
         });
         box.getChildren().addAll(hbox,btnstart);
         box.setAlignment(Pos.CENTER);
