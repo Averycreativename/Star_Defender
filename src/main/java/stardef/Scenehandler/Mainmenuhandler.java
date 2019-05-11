@@ -130,7 +130,7 @@ public class Mainmenuhandler {
     }
     static List<String> getFilenamesinDirectory(String path)
     {
-        String cnstpath="src/main/resources/";
+        /*String cnstpath="src/main/resources/";
         File directory;
         try {
            directory  = new File(ClassLoader.getSystemClassLoader().getResource(path).toURI());//new File(cnstpath+path);
@@ -148,7 +148,20 @@ public class Mainmenuhandler {
         return str;
         }catch (Exception e){}
         List<String> s=new ArrayList<>();
-        return s;
+        return s;*/
+        String cnstpath="src/main/resources/";
+        File directory=new File(cnstpath+path);
+        File[] listOfFiles = directory.listFiles();
+        List<String> str=new ArrayList<String>();
+        for (int i = 0; i < listOfFiles.length; i++)
+        {
+            if (listOfFiles[i].isFile())
+            {
+                str.add(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().indexOf('.')));
+            }
+
+        }
+        return str;
     }
     public static HBox OpenMapChooser(String path)
     {
