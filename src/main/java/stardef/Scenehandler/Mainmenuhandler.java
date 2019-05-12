@@ -14,15 +14,24 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import org.pmw.tinylog.Logger;
 import stardef.Baseclasses.*;
+import stardef.Baseclasses.Xmlloader.Xmlloader;
 import stardef.Star_Defender;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.*;
 import java.rmi.UnexpectedException;
+import java.security.CodeSource;
 import java.util.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class Mainmenuhandler {
 
@@ -148,19 +157,61 @@ public class Mainmenuhandler {
         }catch (Exception e){}
         List<String> s=new ArrayList<>();
         return s;*/
-        String cnstpath="src/main/resources/";
-        File directory=new File(cnstpath+path);
-        File[] listOfFiles = directory.listFiles();
-        List<String> str=new ArrayList<String>();
-        for (int i = 0; i < listOfFiles.length; i++)
-        {
-            if (listOfFiles[i].isFile())
-            {
-                str.add(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().indexOf('.')));
-            }
+        if(false/*!Xmlloader.isInJAR()*/) {
+            String cnstpath = "src/main/resources/";
+            File directory = new File(cnstpath + path);
+            File[] listOfFiles = directory.listFiles();
+            List<String> str = new ArrayList<String>();
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    str.add(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().indexOf('.')));
+                }
 
+            }
+            return str;
         }
-        return str;
+        else{
+            try {
+                /*ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
+                URI uri = sysClassLoader.getResource(path).toURI();
+                Path gameBoardPath = null;
+                if (uri.getScheme().equals("jar")) {
+                    FileSystem fileSystem = FileSystems.newFileSystem(uri,
+                            Collections.<String, Object>emptyMap());
+                    gameBoardPath = fileSystem.getPath(path);
+
+                    //return new*/
+
+                /*
+                URI uri = Star_Defender.class.getResource("").toURI();
+                System.out.println(Star_Defender.class.getResourceAsStream("").);
+                Path myPath;
+                if (uri.getScheme().equals("jar")) {
+                    FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+                    myPath = fileSystem.getPath(path);
+                } else {
+                    myPath = Paths.get(uri);
+                }
+                Stream<Path> walk = Files.walk(myPath, 1);
+                for (Iterator<Path> it = walk.iterator(); it.hasNext();){
+                    System.out.println(it.next());
+                    */
+                Enumeration<URL> en=ClassLoader.getSystemClassLoader().getResources(path);
+                    URL metaInf=en.nextElement();
+                    File fileMetaInf=new File(metaInf.toURI());
+                    List<String> str = new ArrayList<String>();
+                    String[] filenames=fileMetaInf.list();
+                    for(int i =0; i< filenames.length; i++)
+                    {
+                        str.add(filenames[i].substring(0, filenames[i].indexOf('.')));
+                    }
+                return str;
+
+            }catch (URISyntaxException exp){Logger.error(exp.getMessage());}
+             catch (Exception exp){Logger.error(exp.getMessage());}
+        }
+        return new ArrayList<String>();
+
     }
     public static HBox OpenMapChooser(String path)
     {
