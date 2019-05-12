@@ -3,7 +3,22 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>Star_Defender</groupId>
   <artifactId>Star_Defender</artifactId>
+  <name>Checkers Javafx</name>
   <version>1.0-SNAPSHOT</version>
+  <description>A checkers game with gameplay customization features.</description>
+  <url>https://github.com/czegiati/fxproject</url>
+  <developers>
+    <developer>
+      <id>czegilaci</id>
+      <name>Czeglédi Laszlo</name>
+      <email>aproplemavelednincs@gmail.com</email>
+      <organization>Debreceni Egyetem Informatika Kar</organization>
+      <organizationUrl>http://www.inf.unideb.hu/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
   <build>
     <resources>
       <resource>
@@ -71,10 +86,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>game.Main</mainClass>
-                </transformer>
-                <transformer>
-                  <resource>records.xml</resource>
+                  <mainClass>stardef.Star_Defender</mainClass>
                 </transformer>
               </transformers>
             </configuration>

@@ -4,7 +4,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -192,11 +191,11 @@ public class Mainmenuhandler {
         btnstart.setOnMouseClicked(m->{
             try {
                 String path = cnstpath + lv.getSelectionModel().getSelectedItem().toString() + ".png";
-                //Logger.info("File selected: " + ClassLoader.getSystemClassLoader().getResource(path).toURI());
+
                 System.out.println("before1 "+path);
                 Image img=new Image(Mainmenuhandler.class.getClass().getResourceAsStream(path));
                 System.out.println(img);
-                System.out.println("before2");
+                Logger.info("File selected: " + Star_Defender.class.getClass().getResourceAsStream(path).toString());
                 Mainhandler.Generategame(
                         Starmaphandler.Getstarlocation(img), currentscene);
                 currentscene.setRoot(Mainhandler.ssh.GameScreen);
