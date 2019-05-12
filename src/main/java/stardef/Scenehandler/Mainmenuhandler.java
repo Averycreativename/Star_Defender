@@ -182,9 +182,8 @@ public class Mainmenuhandler {
 
                     //return new*/
 
-                /*
-                URI uri = Star_Defender.class.getResource("").toURI();
-                System.out.println(Star_Defender.class.getResourceAsStream("").);
+                List<String> str = new ArrayList<String>();
+                URI uri = ClassLoader.getSystemResources(path).nextElement().toURI();
                 Path myPath;
                 if (uri.getScheme().equals("jar")) {
                     FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
@@ -193,10 +192,17 @@ public class Mainmenuhandler {
                     myPath = Paths.get(uri);
                 }
                 Stream<Path> walk = Files.walk(myPath, 1);
-                for (Iterator<Path> it = walk.iterator(); it.hasNext();){
-                    System.out.println(it.next());
-                    */
-                Enumeration<URL> en=ClassLoader.getSystemClassLoader().getResources(path);
+                for (Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                    String cstr=it.next().toString();
+                    if(cstr.contains("."))
+                    {
+                        //System.out.println(cstr);
+                        str.add(cstr.substring(cstr.lastIndexOf('\\')+1, cstr.indexOf('.')));
+                    }
+
+                }
+                return str;
+               /* Enumeration<URL> en=ClassLoader.getSystemClassLoader().getResources(path);
                     URL metaInf=en.nextElement();
                     File fileMetaInf=new File(metaInf.toURI());
                     List<String> str = new ArrayList<String>();
@@ -205,10 +211,10 @@ public class Mainmenuhandler {
                     {
                         str.add(filenames[i].substring(0, filenames[i].indexOf('.')));
                     }
-                return str;
+                return str;*/
 
             }catch (URISyntaxException exp){Logger.error(exp.getMessage());}
-             catch (Exception exp){Logger.error(exp.getMessage());}
+             catch (IOException exp){Logger.error(exp.getMessage());}
         }
         return new ArrayList<String>();
 
