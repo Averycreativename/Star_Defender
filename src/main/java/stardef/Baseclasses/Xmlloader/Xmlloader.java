@@ -89,7 +89,7 @@ public class Xmlloader
         System.out.println( Star_Defender.class.getResourceAsStream(xmlpath+path) +" inside xmlloader");
         Empires emp=new Empires();
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Empires.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(emp.getClass());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             //emp = (Empires) jaxbUnmarshaller.unmarshal(new File(xmlpath+path));
             emp=(Empires) jaxbUnmarshaller.unmarshal(Star_Defender.class.getResourceAsStream(xmlpath+path));
@@ -103,7 +103,7 @@ public class Xmlloader
         System.out.println( Star_Defender.class.getResourceAsStream(xmlpath+path) +" inside xmlloader");
         Spaceship ss=new Spaceship();
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Spaceship.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(ss.getClass());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             //ss = (Spaceship) jaxbUnmarshaller.unmarshal(new File(xmlpath+path));
             ss = (Spaceship) jaxbUnmarshaller.unmarshal(Star_Defender.class.getResourceAsStream(xmlpath+path));
