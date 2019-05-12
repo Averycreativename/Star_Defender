@@ -195,7 +195,7 @@ public class Mainmenuhandler {
                 System.out.println("before1 "+path+"---------"+Star_Defender.class.getResourceAsStream(path));
                 Image img=new Image(Star_Defender.class.getResourceAsStream(path));
                 System.out.println(img);
-                Logger.info("File selected: " + Star_Defender.class.getClass().getResourceAsStream(path).toString());
+                //Logger.info("File selected: " + Star_Defender.class.getClass().getResourceAsStream(path).toString());
                 Mainhandler.Generategame(
                         Starmaphandler.Getstarlocation(img), currentscene);
                 currentscene.setRoot(Mainhandler.ssh.GameScreen);
