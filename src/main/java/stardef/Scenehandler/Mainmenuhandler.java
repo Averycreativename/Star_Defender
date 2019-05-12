@@ -248,7 +248,7 @@ public class Mainmenuhandler {
         btnstart.setOnMouseClicked(m->{
             //try {
                 String path = cnstpath + lv.getSelectionModel().getSelectedItem().toString() + ".png";
-
+                if(path.contains("\\")){path=path.substring(path.lastIndexOf("\\"));}
                 System.out.println("before1 "+path+"---------"+Star_Defender.class.getResourceAsStream(path));
                 Image img=new Image(Star_Defender.class.getResourceAsStream(path));
                 System.out.println(img);
