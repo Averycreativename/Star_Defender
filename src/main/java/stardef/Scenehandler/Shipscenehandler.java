@@ -768,16 +768,16 @@ public class Shipscenehandler {
         {
         gc.strokeLine(canvas.getWidth()/2+shift,0,canvas.getWidth()/2+shift,canvas.getHeight());
         //my ship
-        gc.drawImage(new Image(Star_Defender.class.getResourceAsStream(my.imagepath+".png")),shipboundaries[0]+shift,shipboundaries[1],shipboundaries[2],shipboundaries[2]);
+        gc.drawImage(new Image(Star_Defender.class.getResourceAsStream(shippath+my.imagepath.substring(my.imagepath.lastIndexOf('/')+1)+".png")),shipboundaries[0]+shift,shipboundaries[1],shipboundaries[2],shipboundaries[2]);
         DrawRooms(roomposxy[0],roomposxy[1], my.rooms,gc);
         //enemy ship
-        gc.drawImage(new Image(Star_Defender.class.getResourceAsStream(other.imagepath+".png")), canvas.getWidth() - shipboundaries[2] + shift / 4, shipboundaries[1], shipboundaries[2], shipboundaries[2]);
+        gc.drawImage(new Image(Star_Defender.class.getResourceAsStream(shippath+other.imagepath.substring(my.imagepath.lastIndexOf('/')+1)+".png")), canvas.getWidth() - shipboundaries[2] + shift / 4, shipboundaries[1], shipboundaries[2], shipboundaries[2]);
         DrawRooms(roomposxy[2], (shipboundaries[1] + shipboundaries[2]) / (3), other.rooms, gc);
         }
         else
             {
                 //my ship
-                gc.drawImage(new Image(Star_Defender.class.getResourceAsStream(my.imagepath+".png")),shipboundaries[0]+shift*3,shipboundaries[1],shipboundaries[2],shipboundaries[2]);
+                gc.drawImage(new Image(Star_Defender.class.getResourceAsStream(shippath+my.imagepath.substring(my.imagepath.lastIndexOf('/')+1)+".png")),shipboundaries[0]+shift*3,shipboundaries[1],shipboundaries[2],shipboundaries[2]);
                 DrawRooms(roomposxy[3],roomposxy[1], my.rooms,gc);
             }
 
