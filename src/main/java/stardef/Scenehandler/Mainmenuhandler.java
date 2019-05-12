@@ -192,7 +192,7 @@ public class Mainmenuhandler {
             //try {
                 String path = cnstpath + lv.getSelectionModel().getSelectedItem().toString() + ".png";
 
-                System.out.println("before1 "+path);
+                System.out.println("before1 "+path+"---------"+Star_Defender.class.getResourceAsStream(path));
                 Image img=new Image(Star_Defender.class.getResourceAsStream(path));
                 System.out.println(img);
                 Logger.info("File selected: " + Star_Defender.class.getClass().getResourceAsStream(path).toString());
