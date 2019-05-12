@@ -189,7 +189,7 @@ public class Mainmenuhandler {
         lv.getSelectionModel().select(0);
         String cnstpath="/Maps/Small/";
         btnstart.setOnMouseClicked(m->{
-            try {
+            //try {
                 String path = cnstpath + lv.getSelectionModel().getSelectedItem().toString() + ".png";
 
                 System.out.println("before1 "+path);
@@ -201,8 +201,8 @@ public class Mainmenuhandler {
                 currentscene.setRoot(Mainhandler.ssh.GameScreen);
                 AnchorPane.setTopAnchor(currentscene.getRoot().getChildrenUnmodifiable().get(0), 0.0);
                 Logger.info(currentscene.getRoot().getClass());
-            }
-            catch (Exception e){Logger.error(e.getMessage()); System.out.println(e.getMessage());}
+            //}
+            //catch (Exception e){Logger.error(e.getMessage()); System.out.println(e.getMessage());}
         });
         box.getChildren().addAll(hbox,btnstart);
         box.setAlignment(Pos.CENTER);
