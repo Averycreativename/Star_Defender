@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import stardef.Baseclasses.Vector2D;
+import stardef.Star_Defender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,8 @@ public class Starmaphandler {
 
     static GridPane fillstarmap(List<Vector2D> backgroundlayer, int width, int height) {
         GridPane gp = new GridPane();
-        Image empty = new Image("file:src/main/resources/Sprites/Tiles/Space_16.png");
-        Image star = new Image("file:src/main/resources/Sprites/Tiles/Star_16.png");
+        Image empty = new Image(Star_Defender.class.getResourceAsStream("/Sprites/Tiles/Space_16.png"));
+        Image star = new Image(Star_Defender.class.getResourceAsStream("/Sprites/Tiles/Star_16.png"));
         int nextstar = 0;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -73,7 +74,7 @@ public class Starmaphandler {
 
     public static void Starmapanimation(AnchorPane root,GridPane gp,List<Vector2D> booleans, String url,Vector2D Currentpos,String linecolor)
     {
-        ImageView iv0=new ImageView(new Image("file:src/main/resources/Sprites/Tiles/"+url));
+        ImageView iv0=new ImageView(new Image(Star_Defender.class.getResourceAsStream("/Sprites/Tiles/"+url)));
         Line line=new Line();
         line.setStyle("-fx-stroke: "+linecolor+";");
         double constantX=(double) Screen.getMainScreen().getWidth()/4;
