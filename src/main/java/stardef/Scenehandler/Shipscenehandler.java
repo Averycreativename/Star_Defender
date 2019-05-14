@@ -397,9 +397,9 @@ public class Shipscenehandler {
         {
             List<Vector2D> allrooms=Room.AllpossiblePositions(ctrl.myship.rooms);
             current=new Vector2D((int)(currentposition[0]/roomsize),(int)(currentposition[1]/roomsize));
-            Logger.info(current.x+" "+current.y);
+            Logger.info("Raycasting start position: "+current.x+" "+current.y);
 
-            Logger.info(Math.round(numberofchecks*(distance/roomsize)));
+            Logger.info("Number of poition checks: "+Math.round(numberofchecks*(distance/roomsize)));
             int length=Math.round((float)(numberofchecks*(distance/roomsize)));
             for(int i=0;i<length;i++)
             {
@@ -495,6 +495,7 @@ public class Shipscenehandler {
                         Logger.info("The combat is over!");
                         premadecanvas=pixelScaleAwareCanvasSnapshot(CreateShipScenePremade(ctrl.myship,Enemyship),1);
                         Drawselectable(crew);}
+                    else if(crew.length==0){scene.setRoot(Mainmenuhandler.MainMenu(scene));}
                     else
                         {
                             Logger.info("It's the player's turn again!");

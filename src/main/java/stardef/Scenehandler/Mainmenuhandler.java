@@ -138,26 +138,7 @@ public class Mainmenuhandler {
     }
     static List<String> getFilenamesinDirectory(String path)
     {
-        /*String cnstpath="src/main/resources/";
-        File directory;
-        try {
-           directory  = new File(ClassLoader.getSystemClassLoader().getResource(path).toURI());//new File(cnstpath+path);
-
-        File[] listOfFiles = directory.listFiles();
-        List<String> str=new ArrayList<String>();
-        for (int i = 0; i < listOfFiles.length; i++)
-        {
-            if (listOfFiles[i].isFile())
-            {
-               str.add(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().indexOf('.')));
-            }
-
-        }
-        return str;
-        }catch (Exception e){}
-        List<String> s=new ArrayList<>();
-        return s;*/
-        if(false/*!Xmlloader.isInJAR()*/) {
+        if(!Xmlloader.isInJAR()) {
             String cnstpath = "src/main/resources/";
             File directory = new File(cnstpath + path);
             File[] listOfFiles = directory.listFiles();
@@ -172,16 +153,6 @@ public class Mainmenuhandler {
         }
         else{
             try {
-                /*ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
-                URI uri = sysClassLoader.getResource(path).toURI();
-                Path gameBoardPath = null;
-                if (uri.getScheme().equals("jar")) {
-                    FileSystem fileSystem = FileSystems.newFileSystem(uri,
-                            Collections.<String, Object>emptyMap());
-                    gameBoardPath = fileSystem.getPath(path);
-
-                    //return new*/
-
                 List<String> str = new ArrayList<String>();
                 URI uri = ClassLoader.getSystemResources(path).nextElement().toURI();
                 Path myPath;
@@ -196,23 +167,11 @@ public class Mainmenuhandler {
                     String cstr=it.next().toString();
                     if(cstr.contains("."))
                     {
-                        //System.out.println(cstr);
                         str.add(cstr.substring(cstr.lastIndexOf('\\')+1, cstr.indexOf('.')));
                     }
 
                 }
                 return str;
-               /* Enumeration<URL> en=ClassLoader.getSystemClassLoader().getResources(path);
-                    URL metaInf=en.nextElement();
-                    File fileMetaInf=new File(metaInf.toURI());
-                    List<String> str = new ArrayList<String>();
-                    String[] filenames=fileMetaInf.list();
-                    for(int i =0; i< filenames.length; i++)
-                    {
-                        str.add(filenames[i].substring(0, filenames[i].indexOf('.')));
-                    }
-                return str;*/
-
             }catch (URISyntaxException exp){Logger.error(exp.getMessage());}
              catch (IOException exp){Logger.error(exp.getMessage());}
         }
@@ -246,20 +205,14 @@ public class Mainmenuhandler {
         lv.getSelectionModel().select(0);
         String cnstpath="/Maps/Small/";
         btnstart.setOnMouseClicked(m->{
-            //try {
                 String path = cnstpath + lv.getSelectionModel().getSelectedItem().toString() + ".png";
                 if(path.contains("/")){path=cnstpath+path.substring(path.lastIndexOf("/")+1);}
-                System.out.println("before1 "+path+"---------"+Star_Defender.class.getResourceAsStream(path));
                 Image img=new Image(Star_Defender.class.getResourceAsStream(path));
-                System.out.println(img);
-                //Logger.info("File selected: " + Star_Defender.class.getClass().getResourceAsStream(path).toString());
                 Mainhandler.Generategame(
                         Starmaphandler.Getstarlocation(img), currentscene);
                 currentscene.setRoot(Mainhandler.ssh.GameScreen);
                 AnchorPane.setTopAnchor(currentscene.getRoot().getChildrenUnmodifiable().get(0), 0.0);
                 Logger.info(currentscene.getRoot().getClass());
-            //}
-            //catch (Exception e){Logger.error(e.getMessage()); System.out.println(e.getMessage());}
         });
         box.getChildren().addAll(hbox,btnstart);
         box.setAlignment(Pos.CENTER);

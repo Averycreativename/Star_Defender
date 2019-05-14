@@ -93,7 +93,6 @@ public class Starmaphandler {
                     line.setEndY(node.getLayoutY()+gp.getMinHeight()/8);
 
                     node.setOnMouseClicked((MouseEvent clicked) ->{
-                    //Logger.info("Player clicked on: "+GridPane.getColumnIndex(node)+" "+GridPane.getRowIndex(node));
                     if(Vector2D.Equal(Mainhandler.starmapposition,new Vector2D(GridPane.getColumnIndex(node),GridPane.getRowIndex(node))))
                     {
                         Mainhandler.ssh.scene.setRoot(Mainhandler.ssh.GameScreen);
