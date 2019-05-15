@@ -35,6 +35,7 @@ import stardef.Baseclasses.Room;
 import stardef.Baseclasses.Vector2D;
 import stardef.Baseclasses.Shipdata;
 import stardef.Baseclasses.Spaceship;
+import stardef.Drawfunctions.Mainmenuview;
 import stardef.Star_Defender;
 
 import java.lang.reflect.Array;
@@ -378,7 +379,7 @@ public class Shipscenehandler {
 
 
     /**
-     * sdfg.
+     * Basically 2D raycasting.
      * @param character Choosen crewmember
      * @param pathshift Csusztatas
      * @param endpos Desired position
@@ -426,7 +427,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Distance between 2 points in double.
      * @param start a position on canvas
      * @param end a position on canvas
      * @return return the distance between 2 points
@@ -495,7 +496,7 @@ public class Shipscenehandler {
                         Logger.info("The combat is over!");
                         premadecanvas=pixelScaleAwareCanvasSnapshot(CreateShipScenePremade(ctrl.myship,Enemyship),1);
                         Drawselectable(crew);}
-                    else if(crew.length==0){scene.setRoot(Mainmenuhandler.MainMenu(scene));}
+                    else if(crew.length==0){scene.setRoot(Mainmenuview.MainMenu(scene));}
                     else
                         {
                             Logger.info("It's the player's turn again!");
@@ -624,7 +625,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Basic custom pathfinder.
      * @param start position of the character
      * @param end where the character want to get
      * @param moves a list of moves where the character can step based on the speed variable of the character
@@ -644,7 +645,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * All possible moves where the chosen character can get.
      * @param character choosen crew
      * @param distance number of steps
      * @param possiblepos positions on the ship where the character is
@@ -704,6 +705,7 @@ public class Shipscenehandler {
     }
 //endregion
 //region Create_ship_scenes
+    //unused method that draws the whole scene
     private void CreateShipScene()
     {
         Image image = new Image("file:src/main/resources/Sprites/Ships/strdfxcf.png");
@@ -722,7 +724,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Canvas to image converter.
      * @param canvas a whole canvas that will be re-rendered every time
      * @param pixelScale relative size of image compared to the original canvas (it is unnecessary because the scale of image does not matter)
      * @return return an image that will be used to redraw the scene
@@ -751,10 +753,10 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Part of the scene that never of rarely changes.
      * @param my my spaceship
      * @param other enemy spaceship
-     * @return return s canvas tthat will be rarely changed and always re-rendered
+     * @return return s canvas that will be rarely changed and always re-rendered
      */
     Canvas CreateShipScenePremade(Spaceship my,Spaceship other)
     {
@@ -796,15 +798,15 @@ public class Shipscenehandler {
     }
 
     /**
-     *
-     * @param a a choosen Vector2D
-     * @param b another choosen Vector2D
+     * Self explanatory.
+     * @param a a chosen Vector2D
+     * @param b another chosen Vector2D
      * @return distance between a and b
      */
     double Distance(Vector2D a,Vector2D b) { return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y); }
 
     /**
-     *
+     * Random between 2 numbers
      * @param min lowest value we want the double to be
      * @param max highest value we want the double to be
      * @return return a random double value between min and max
@@ -817,7 +819,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Random room.
      * @param v2d list of possible positions
      * @return a random Vector2D from v2d
      */
@@ -889,8 +891,8 @@ public class Shipscenehandler {
     }
 
     /**
-     *
-     * @param ship choosed spaceship
+     *  Returns the most important room.
+     * @param ship chosed spaceship
      * @return checks all the possible room types and return the most important one
      */
     Room.Roomtype Nextroomtype(Spaceship ship)
@@ -907,7 +909,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Checks if Roomtype exists.
      * @param rooms an array of rooms
      * @param rt room type we want to check
      * @return return true if rt type of room exists in rooms
@@ -916,13 +918,20 @@ public class Shipscenehandler {
     { return Arrays.stream(rooms).anyMatch(e->e.roomtype==rt); }
 
     /**
-     *
+     * Checks if room have free space.
      * @param ship choosed spaceship
      * @param rt room type we want to check
      * @return return true if rt room type have 1 or more free spaces
      */
     boolean X_room_havefreespace(Spaceship ship,Room.Roomtype rt)
     { if(X_room_freespaces(ship, rt).isEmpty()){return false;} return true;}
+
+    /**
+     * Returns all the possible rooms in roomtype
+     * @param ship
+     * @param rt
+     * @return
+     */
     List<Vector2D> X_room_freespaces(Spaceship ship,Room.Roomtype rt)
     {
         List<Vector2D> v2d=Room.PossiblePositions(Arrays.stream(ship.rooms).filter(e->e.roomtype==rt).findFirst().get());
@@ -934,7 +943,7 @@ public class Shipscenehandler {
     }
 
     /**
-     *
+     * Checks if someone standing on Vector2D
      * @param v2d Vector2D we want to chack
      * @param onmyship boolean that ditermanes the ship to check out
      * @return return true if there is no character standing on v2d
@@ -946,14 +955,9 @@ public class Shipscenehandler {
         {return true;}
         return false;
     }
-    /*
-    boolean Enemy_on_same_ship(Race me,Race[] enemy)
-    {
-        return Arrays.stream(enemy).anyMatch(e->e.Onmyship==me.Onmyship);
-    }*/
 
     /**
-     *
+     * Get controlroom in a roomtype
      * @param ship spaceship we want to check
      * @param rt room type we want to check
      * @return returns the Vector2D position of the control room of rt room type on ship
