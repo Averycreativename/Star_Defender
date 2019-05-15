@@ -489,7 +489,7 @@ public class Shipscenehandler {
                 if(Enemyship!=null)
                 {
                     if(Enemyship.shipdata.staff.length!=0&&Arrays.stream(Enemyship.shipdata.staff).anyMatch(e->e.Moved==false))
-                    {Enemyturn(Enemyship,ctrl.myship,Getnextenemy());}
+                    {enemyturn(Enemyship,ctrl.myship,Getnextenemy());}
                     else if(Enemyship.shipdata.staff.length==0||Enemyship.shipdata.currenthealth==0)
                     {
                         Enemyship=null;
@@ -638,7 +638,7 @@ public class Shipscenehandler {
         if(IncludeStart){v2d.add(start);}
         while(!Vector2D.Equal(v2d.get(v2d.size()-1),end))
         {
-            v2d.add(moves.stream().filter(e->Distance(e,v2d.get(v2d.size()-1))==1).min(Comparator.comparing(e->Distance(e,end))).get());
+            v2d.add(moves.stream().filter(e->distance(e,v2d.get(v2d.size()-1))==1).min(Comparator.comparing(e->distance(e,end))).get());
         }
         Logger.info("Optimal path: "+v2d.size());
         return v2d;
@@ -803,7 +803,7 @@ public class Shipscenehandler {
      * @param b another chosen Vector2D
      * @return distance between a and b
      */
-    double Distance(Vector2D a,Vector2D b) { return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y); }
+    double distance(Vector2D a,Vector2D b) { return (a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y); }
 
     /**
      * Random between 2 numbers
@@ -811,7 +811,7 @@ public class Shipscenehandler {
      * @param max highest value we want the double to be
      * @return return a random double value between min and max
      */
-    double Randomrange(double min,double max)
+    double randomrange(double min,double max)
     {
         if(min >=max){ Logger.warn("'max' must be higher than 'min'");return 0;}
         Random r=new Random();
@@ -823,11 +823,11 @@ public class Shipscenehandler {
      * @param v2d list of possible positions
      * @return a random Vector2D from v2d
      */
-    Vector2D Randomroom(List<Vector2D> v2d)
-    {return v2d.get((int)Randomrange(0,v2d.size()-1));}
+    Vector2D randomroom(List<Vector2D> v2d)
+    {return v2d.get((int)randomrange(0,v2d.size()-1));}
 //endregion
 //region AI
-    void Enemyturn(Spaceship enemy,Spaceship my,int currentenemy)
+    void enemyturn(Spaceship enemy,Spaceship my,int currentenemy)
     {
         Race[] enemycrew=enemy.shipdata.staff;
         Race[] mycrew=my.shipdata.staff;
@@ -841,9 +841,9 @@ public class Shipscenehandler {
                     if (!Arrays.stream(enemycrew).anyMatch(e -> e.Onmyship==false)) {
                         AI_teleportback(enemycrew[currentenemy]);
                     } else {
-                        if(!Is_anybodyonVector2D(X_room_controlroomtile(enemy, Room.Roomtype.Piloting),false))
+                        if(!is_anybodyonVector2D(x_room_controlroomtile(enemy, Room.Roomtype.Piloting),false))
                         { AI_gotopiloting(Enemyship,enemycrew[currentenemy]);}
-                        else if(Vector2D.Equal(X_room_controlroomtile(enemy, Room.Roomtype.Piloting),enemycrew[currentenemy].position))
+                        else if(Vector2D.Equal(x_room_controlroomtile(enemy, Room.Roomtype.Piloting),enemycrew[currentenemy].position))
                         {enemycrew[currentenemy].overwatch=true;}
                     }
                 } else {
@@ -852,7 +852,7 @@ public class Shipscenehandler {
                             AI_gotoattack(my,enemycrew[currentenemy]);
                         }
                         else {
-                            if(X_room_exists(Enemyship.rooms, Room.Roomtype.Teleporter)&&X_room_havefreespace(Enemyship, Room.Roomtype.Teleporter)) {
+                            if(x_room_exists(Enemyship.rooms, Room.Roomtype.Teleporter)&&x_room_havefreespace(Enemyship, Room.Roomtype.Teleporter)) {
                                 if(!Vector2D.Contains(Room.PossiblePositions(Arrays.stream(Enemyship.rooms).filter(e->e.roomtype== Room.Roomtype.Teleporter).findFirst().get())
                                         ,enemycrew[currentenemy].position))
                                 {AI_gototeleporter(Enemyship,enemycrew[currentenemy]);}
@@ -864,13 +864,13 @@ public class Shipscenehandler {
                                                                 .filter(e->
                                                                 !Vector2D.Contains(Arrays.stream(Enemyship.shipdata.staff).filter(f->f.Onmyship).map(f->f.position).collect(Collectors.toList()),e)).collect(Collectors.toList());
 
-                                        AI_teleportin(Enemyship,enemycrew[currentenemy],Randomroom(v2d));
+                                        AI_teleportin(Enemyship,enemycrew[currentenemy],randomroom(v2d));
                                     }
                             }
                             else{
                                 if(Nextroomtype(enemy)!= Room.Roomtype.None)
                                 {
-                                    AI_goto(enemy,enemycrew[currentenemy],X_room_controlroomtile(enemy,Nextroomtype(enemy)));
+                                    AI_goto(enemy,enemycrew[currentenemy],x_room_controlroomtile(enemy,Nextroomtype(enemy)));
                                 }
                                 else{ enemycrew[currentenemy].overwatch=true;}
                             }
@@ -897,14 +897,14 @@ public class Shipscenehandler {
      */
     Room.Roomtype Nextroomtype(Spaceship ship)
     {
-        if(X_room_exists(ship.rooms, Room.Roomtype.Piloting)&&X_room_havefreespace(ship, Room.Roomtype.Piloting)){return Room.Roomtype.Piloting;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Engine)&&X_room_havefreespace(ship, Room.Roomtype.Engine)){return Room.Roomtype.Engine;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Weaponsystem)&&X_room_havefreespace(ship, Room.Roomtype.Weaponsystem)){return Room.Roomtype.Weaponsystem;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Shield)&&X_room_havefreespace(ship, Room.Roomtype.Shield)){return Room.Roomtype.Shield;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Teleporter)&&X_room_havefreespace(ship, Room.Roomtype.Teleporter)){return Room.Roomtype.Teleporter;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Medibay)&&X_room_havefreespace(ship, Room.Roomtype.Medibay)){return Room.Roomtype.Medibay;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Storage)&&X_room_havefreespace(ship, Room.Roomtype.Storage)){return Room.Roomtype.Storage;}
-        else if(X_room_exists(ship.rooms, Room.Roomtype.Doorsystem)&&X_room_havefreespace(ship, Room.Roomtype.Doorsystem)){return Room.Roomtype.Doorsystem;}
+        if(x_room_exists(ship.rooms, Room.Roomtype.Piloting)&&x_room_havefreespace(ship, Room.Roomtype.Piloting)){return Room.Roomtype.Piloting;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Engine)&&x_room_havefreespace(ship, Room.Roomtype.Engine)){return Room.Roomtype.Engine;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Weaponsystem)&&x_room_havefreespace(ship, Room.Roomtype.Weaponsystem)){return Room.Roomtype.Weaponsystem;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Shield)&&x_room_havefreespace(ship, Room.Roomtype.Shield)){return Room.Roomtype.Shield;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Teleporter)&&x_room_havefreespace(ship, Room.Roomtype.Teleporter)){return Room.Roomtype.Teleporter;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Medibay)&&x_room_havefreespace(ship, Room.Roomtype.Medibay)){return Room.Roomtype.Medibay;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Storage)&&x_room_havefreespace(ship, Room.Roomtype.Storage)){return Room.Roomtype.Storage;}
+        else if(x_room_exists(ship.rooms, Room.Roomtype.Doorsystem)&&x_room_havefreespace(ship, Room.Roomtype.Doorsystem)){return Room.Roomtype.Doorsystem;}
         else {return Room.Roomtype.None;}
     }
 
@@ -914,7 +914,7 @@ public class Shipscenehandler {
      * @param rt room type we want to check
      * @return return true if rt type of room exists in rooms
      */
-    boolean X_room_exists(Room[] rooms, Room.Roomtype rt)
+    boolean x_room_exists(Room[] rooms, Room.Roomtype rt)
     { return Arrays.stream(rooms).anyMatch(e->e.roomtype==rt); }
 
     /**
@@ -923,8 +923,8 @@ public class Shipscenehandler {
      * @param rt room type we want to check
      * @return return true if rt room type have 1 or more free spaces
      */
-    boolean X_room_havefreespace(Spaceship ship,Room.Roomtype rt)
-    { if(X_room_freespaces(ship, rt).isEmpty()){return false;} return true;}
+    boolean x_room_havefreespace(Spaceship ship,Room.Roomtype rt)
+    { if(x_room_freespaces(ship, rt).isEmpty()){return false;} return true;}
 
     /**
      * Returns all the possible rooms in roomtype
@@ -932,12 +932,12 @@ public class Shipscenehandler {
      * @param rt
      * @return
      */
-    List<Vector2D> X_room_freespaces(Spaceship ship,Room.Roomtype rt)
+    List<Vector2D> x_room_freespaces(Spaceship ship,Room.Roomtype rt)
     {
         List<Vector2D> v2d=Room.PossiblePositions(Arrays.stream(ship.rooms).filter(e->e.roomtype==rt).findFirst().get());
         for(int i=0;i<v2d.size()-1;i++)
         {
-            if(Is_anybodyonVector2D(v2d.get(i),false)){v2d.remove(i);i--;}
+            if(is_anybodyonVector2D(v2d.get(i),false)){v2d.remove(i);i--;}
         }
         return v2d;
     }
@@ -948,7 +948,7 @@ public class Shipscenehandler {
      * @param onmyship boolean that ditermanes the ship to check out
      * @return return true if there is no character standing on v2d
      */
-    boolean Is_anybodyonVector2D(Vector2D v2d,boolean onmyship)
+    boolean is_anybodyonVector2D(Vector2D v2d,boolean onmyship)
     {
         if(Arrays.stream(ctrl.myship.shipdata.staff).anyMatch(e->e.Onmyship==onmyship&&e.position==v2d)&&
                 Arrays.stream(Enemyship.shipdata.staff).anyMatch(e->e.Onmyship==onmyship&&e.position==v2d))
@@ -962,20 +962,20 @@ public class Shipscenehandler {
      * @param rt room type we want to check
      * @return returns the Vector2D position of the control room of rt room type on ship
      */
-    Vector2D X_room_controlroomtile(Spaceship ship,Room.Roomtype rt)
+    Vector2D x_room_controlroomtile(Spaceship ship,Room.Roomtype rt)
     {
         Vector2D v2d=Arrays.stream(ship.rooms).filter(f->f.roomtype==rt).findFirst().map(f->f.Controlltileinroomsize).get();
-        List<Vector2D> v2d2= X_room_freespaces(ship,rt);
+        List<Vector2D> v2d2= x_room_freespaces(ship,rt);
         return v2d2.stream().filter(e->Vector2D.Equal(e,new Vector2D(v2d2.get(0).x+v2d.x,v2d2.get(0).y+v2d.y))).findFirst().get();
     }
 
     void AI_gototeleporter(Spaceship ship,Race r)
     {
-        AI_goto(ship,r,X_room_freespaces(ship, Room.Roomtype.Teleporter).get(0));
+        AI_goto(ship,r,x_room_freespaces(ship, Room.Roomtype.Teleporter).get(0));
     }
     void AI_gotopiloting(Spaceship ship,Race r)
     {
-        AI_goto(ship,r,X_room_controlroomtile(ship, Room.Roomtype.Piloting));
+        AI_goto(ship,r,x_room_controlroomtile(ship, Room.Roomtype.Piloting));
     }
 
     /**
@@ -1008,7 +1008,7 @@ public class Shipscenehandler {
         {
             AI_goto(ship,r,Arrays.stream(ctrl.myship.shipdata.staff)
                     .filter(e->e.Onmyship==r.Onmyship)
-                    .min(Comparator.comparing(e->Distance(e.position,r.position))).get().position);
+                    .min(Comparator.comparing(e->distance(e.position,r.position))).get().position);
         }
         //attack enemy
         else
@@ -1027,7 +1027,7 @@ public class Shipscenehandler {
 
 
         List<Vector2D> v2d=Moves(r,r.speed,Room.AllpossiblePositions(ship.rooms),false);
-        Vector2D closest=v2d.stream().filter(e->!Vector2D.Contains(Arrays.stream(ship.shipdata.staff).map(f->f.position).collect(Collectors.toList()),e)).min(Comparator.comparing(e->Distance(e,goal))).get();
+        Vector2D closest=v2d.stream().filter(e->!Vector2D.Contains(Arrays.stream(ship.shipdata.staff).map(f->f.position).collect(Collectors.toList()),e)).min(Comparator.comparing(e->distance(e,goal))).get();
         Logger.info("goal:"+goal.x+" "+goal.y+" "+closest.x+" "+closest.y);
         MoveAnimator(v2dpath(r.position,closest,v2d,true),r,false);
     }
