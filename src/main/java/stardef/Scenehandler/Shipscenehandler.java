@@ -236,7 +236,7 @@ public class Shipscenehandler {
     }
 //endregion
 //region Moving_related_methods
-    void MoveAnimator(List<Vector2D> steps,Race race,boolean myturn)
+    void moveAnimator(List<Vector2D> steps,Race race,boolean myturn)
     {
         InputDisabled=true;
         Timeline timeline = new Timeline();
@@ -267,7 +267,7 @@ public class Shipscenehandler {
             timeline.playFromStart();
 
     }
-    void TeleportAnimator(List<Vector2D> steps,Race race,boolean myturn)
+    void teleportAnimator(List<Vector2D> steps,Race race,boolean myturn)
     {
         InputDisabled=true;
         Timeline timeline = new Timeline();
@@ -290,7 +290,7 @@ public class Shipscenehandler {
                 }));
         timeline.playFromStart();
     }
-    void ProjectileAnimator(Race start,Race attacked,Pane drawon)
+    void projectileAnimator(Race start,Race attacked,Pane drawon)
     {
         InputDisabled=true;
         boolean samex=false;
@@ -561,7 +561,7 @@ public class Shipscenehandler {
                         Logger.info(character.name+" and "+ switchedwith.name+ " switched positions");
                         character.Moved=true;
                         container.getChildren().removeAll(container.getChildren());
-                        MoveAnimator(v2dpath(character.position,current,moves,true),character,true);
+                        moveAnimator(v2dpath(character.position,current,moves,true),character,true);
                     });
                 });
                 rect.setOnMouseExited(e->rect.setFill(Stepcolor[5]));
@@ -581,7 +581,7 @@ public class Shipscenehandler {
                         Logger.info(character.name+" attacked "+attacked.name);
                         character.Moved=true;
                         container.getChildren().removeAll(container.getChildren());
-                        ProjectileAnimator(character,attacked,container);
+                        projectileAnimator(character,attacked,container);
                     });
                 });
                 rect.setOnMouseExited(e->rect.setFill(Stepcolor[7]));
@@ -601,7 +601,7 @@ public class Shipscenehandler {
                         Logger.info(character.name+" moved to: x:"+current.x+" y:"+current.y);
                         character.Moved=true;
                         container.getChildren().removeAll(container.getChildren());
-                        MoveAnimator(v2dpath(character.position,current,moves,true),character,true);
+                        moveAnimator(v2dpath(character.position,current,moves,true),character,true);
                     });
                 });
                 rect.setOnMouseExited(e->rect.setFill(Stepcolor[9]));
@@ -615,7 +615,7 @@ public class Shipscenehandler {
                         Logger.info(character.name+" moved to: x:"+current.x+" y:"+current.y);
                         character.Moved=true;
                         container.getChildren().removeAll(container.getChildren());
-                        MoveAnimator(v2dpath(character.position,current,moves,true),character,true);
+                        moveAnimator(v2dpath(character.position,current,moves,true),character,true);
                     });
                 });
                 rect.setOnMouseExited(e -> rect.setFill(Stepcolor[1]));
@@ -1013,7 +1013,7 @@ public class Shipscenehandler {
         //attack enemy
         else
             {
-                ProjectileAnimator(r, Arrays.stream(ctrl.myship.shipdata.staff)
+                projectileAnimator(r, Arrays.stream(ctrl.myship.shipdata.staff)
                         .filter(e->e.Onmyship==r.Onmyship&&Vector2D.Equal(closebyenemies.get(0),e.position)).findFirst().get(),
                         (Pane)GameScreen.getChildren().get(1));
             }
@@ -1029,7 +1029,7 @@ public class Shipscenehandler {
         List<Vector2D> v2d=Moves(r,r.speed,Room.AllpossiblePositions(ship.rooms),false);
         Vector2D closest=v2d.stream().filter(e->!Vector2D.Contains(Arrays.stream(ship.shipdata.staff).map(f->f.position).collect(Collectors.toList()),e)).min(Comparator.comparing(e->distance(e,goal))).get();
         Logger.info("goal:"+goal.x+" "+goal.y+" "+closest.x+" "+closest.y);
-        MoveAnimator(v2dpath(r.position,closest,v2d,true),r,false);
+        moveAnimator(v2dpath(r.position,closest,v2d,true),r,false);
     }
     void AI_teleportin(Spaceship ship,Race r,Vector2D goal)
     {
@@ -1037,7 +1037,7 @@ public class Shipscenehandler {
         Logger.info("Enemy "+r.name+" teleported into our ship!");
         v2d.add(r.position);
         v2d.add(goal);
-        TeleportAnimator(v2d,r,false);
+        teleportAnimator(v2d,r,false);
     }
 //endregion
 
